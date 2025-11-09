@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Integration test for ExternalToolBridge.
@@ -22,10 +21,13 @@ class ExternalToolBridgeIntegrationTest {
 
         client.when()
                 .toolsCall("echo", Map.of("input", "test"), r -> {
-                    assertEquals("ECHO: test", r.content().get(0).asText().text());
+                    assertThat(r.content().get(0).asText().text())
+                        .isEqualTo("ECHO: test");
                 })
                 .toolsCall("echo", r -> {
-                    assertThat(r.isError()).isTrue();
+                    assertThat(r.isError())
+                        .as("Echo tool should return error when called without input")
+                        .isTrue();
                 })
                 .thenAssertResults();
     }

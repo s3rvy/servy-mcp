@@ -3,7 +3,7 @@ package com.servy.mcp.tool.impl;
 import com.servy.mcp.tool.ToolResult;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit tests for EchoTool.
@@ -14,14 +14,17 @@ class EchoToolTest {
     @Test
     void shouldReturnCorrectName() {
         EchoTool tool = new EchoTool();
-        assertEquals("echo", tool.name());
+        
+        assertThat(tool.name()).isEqualTo("echo");
     }
 
     @Test
     void shouldReturnNonEmptyDescription() {
         EchoTool tool = new EchoTool();
-        assertNotNull(tool.description());
-        assertFalse(tool.description().isEmpty());
+        
+        assertThat(tool.description())
+            .isNotNull()
+            .isNotEmpty();
     }
 
     @Test
@@ -29,11 +32,14 @@ class EchoToolTest {
         EchoTool tool = new EchoTool();
         ToolResult result = tool.execute("Hello World");
 
-        assertNotNull(result);
-        assertTrue(result.isSuccess());
-        assertEquals("ECHO: Hello World", result.getOutput());
-        assertEquals("echo", result.getToolName());
-        assertNull(result.getError());
+        assertThat(result)
+            .isNotNull()
+            .satisfies(r -> {
+                assertThat(r.isSuccess()).isTrue();
+                assertThat(r.getOutput()).isEqualTo("ECHO: Hello World");
+                assertThat(r.getToolName()).isEqualTo("echo");
+                assertThat(r.getError()).isNull();
+            });
     }
 
     @Test
@@ -41,11 +47,14 @@ class EchoToolTest {
         EchoTool tool = new EchoTool();
         ToolResult result = tool.execute(null);
 
-        assertNotNull(result);
-        assertFalse(result.isSuccess());
-        assertEquals("no input", result.getError());
-        assertEquals("echo", result.getToolName());
-        assertNull(result.getOutput());
+        assertThat(result)
+            .isNotNull()
+            .satisfies(r -> {
+                assertThat(r.isSuccess()).isFalse();
+                assertThat(r.getError()).isEqualTo("no input");
+                assertThat(r.getToolName()).isEqualTo("echo");
+                assertThat(r.getOutput()).isNull();
+            });
     }
 
     @Test
@@ -53,8 +62,11 @@ class EchoToolTest {
         EchoTool tool = new EchoTool();
         ToolResult result = tool.execute("");
 
-        assertNotNull(result);
-        assertTrue(result.isSuccess());
-        assertEquals("ECHO: ", result.getOutput());
+        assertThat(result)
+            .isNotNull()
+            .satisfies(r -> {
+                assertThat(r.isSuccess()).isTrue();
+                assertThat(r.getOutput()).isEqualTo("ECHO: ");
+            });
     }
 }
