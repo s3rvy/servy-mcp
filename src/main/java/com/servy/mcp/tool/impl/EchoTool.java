@@ -4,13 +4,18 @@ import com.servy.mcp.tool.Tool;
 import com.servy.mcp.tool.ToolResult;
 
 /**
- * A tiny example Tool that echoes back the input.
+ * Example external Tool implementation that echoes back the input.
  */
 public class EchoTool implements Tool {
 
     @Override
     public String name() {
         return "echo";
+    }
+
+    @Override
+    public String description() {
+        return "Echoes back the input with a prefix";
     }
 
     @Override
