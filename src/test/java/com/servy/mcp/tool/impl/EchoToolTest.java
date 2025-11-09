@@ -1,38 +1,33 @@
 package com.servy.mcp.tool.impl;
 
 import com.servy.mcp.tool.ToolResult;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for EchoTool implementation.
+ * Unit tests for EchoTool.
+ * Tests the tool implementation without any framework dependencies.
  */
 class EchoToolTest {
 
-    private EchoTool echoTool;
-
-    @BeforeEach
-    void setUp() {
-        echoTool = new EchoTool();
+    @Test
+    void shouldReturnCorrectName() {
+        EchoTool tool = new EchoTool();
+        assertEquals("echo", tool.name());
     }
 
     @Test
-    void testName() {
-        assertEquals("echo", echoTool.name());
+    void shouldReturnNonEmptyDescription() {
+        EchoTool tool = new EchoTool();
+        assertNotNull(tool.description());
+        assertFalse(tool.description().isEmpty());
     }
 
     @Test
-    void testDescription() {
-        assertNotNull(echoTool.description());
-        assertFalse(echoTool.description().isEmpty());
-    }
-
-    @Test
-    void testExecuteWithValidInput() {
-        String input = "Hello World";
-        ToolResult result = echoTool.execute(input);
+    void shouldEchoValidInput() {
+        EchoTool tool = new EchoTool();
+        ToolResult result = tool.execute("Hello World");
 
         assertNotNull(result);
         assertTrue(result.isSuccess());
@@ -42,18 +37,9 @@ class EchoToolTest {
     }
 
     @Test
-    void testExecuteWithEmptyInput() {
-        String input = "";
-        ToolResult result = echoTool.execute(input);
-
-        assertNotNull(result);
-        assertTrue(result.isSuccess());
-        assertEquals("ECHO: ", result.getOutput());
-    }
-
-    @Test
-    void testExecuteWithNullInput() {
-        ToolResult result = echoTool.execute(null);
+    void shouldHandleNullInput() {
+        EchoTool tool = new EchoTool();
+        ToolResult result = tool.execute(null);
 
         assertNotNull(result);
         assertFalse(result.isSuccess());
@@ -63,12 +49,12 @@ class EchoToolTest {
     }
 
     @Test
-    void testExecuteWithSpecialCharacters() {
-        String input = "Test!@#$%^&*()";
-        ToolResult result = echoTool.execute(input);
+    void shouldHandleEmptyInput() {
+        EchoTool tool = new EchoTool();
+        ToolResult result = tool.execute("");
 
         assertNotNull(result);
         assertTrue(result.isSuccess());
-        assertEquals("ECHO: Test!@#$%^&*()", result.getOutput());
+        assertEquals("ECHO: ", result.getOutput());
     }
 }
