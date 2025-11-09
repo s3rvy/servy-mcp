@@ -16,9 +16,16 @@ public class EchoTool implements Tool {
     @Override
     public ToolResult execute(String input) {
         if (input == null) {
-            return new ToolResult(name(), false, null, "no input");
+            return ToolResult.builder()
+                .toolName(name())
+                .success(false)
+                .error("no input")
+                .build();
         }
-        String out = "ECHO: " + input;
-        return new ToolResult(name(), true, out, null);
+        return ToolResult.builder()
+            .toolName(name())
+            .success(true)
+            .output("ECHO: " + input)
+            .build();
     }
 }

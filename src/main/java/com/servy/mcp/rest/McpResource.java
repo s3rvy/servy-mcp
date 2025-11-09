@@ -27,23 +27,31 @@ public class McpResource {
     public ExecuteResponse execute(ExecuteRequest request) {
         List<ToolResult> results = new ArrayList<>();
         if (request == null || request.getTools() == null) {
-            return new ExecuteResponse(results);
+            return ExecuteResponse.builder().results(results).build();
         }
 
         for (String toolName : request.getTools()) {
             Tool t = registry.get(toolName);
             if (t == null) {
-                results.add(new ToolResult(toolName, false, null, "tool not found"));
+                results.add(ToolResult.builder()
+                    .toolName(toolName)
+                    .success(false)
+                    .error("tool not found")
+                    .build());
                 continue;
             }
             try {
                 ToolResult r = t.execute(request.getInput());
                 results.add(r);
             } catch (Exception e) {
-                results.add(new ToolResult(toolName, false, null, e.getMessage()));
+                results.add(ToolResult.builder()
+                    .toolName(toolName)
+                    .success(false)
+                    .error(e.getMessage())
+                    .build());
             }
         }
 
-        return new ExecuteResponse(results);
+        return ExecuteResponse.builder().results(results).build();
     }
 }
