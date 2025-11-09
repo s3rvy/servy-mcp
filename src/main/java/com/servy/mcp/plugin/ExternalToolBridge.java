@@ -2,9 +2,8 @@ package com.servy.mcp.plugin;
 
 import com.servy.mcp.tool.Tool;
 import com.servy.mcp.tool.ToolRegistry;
-import io.quarkiverse.mcp.server.core.ToolManager;
-import io.quarkiverse.mcp.server.core.ToolRef;
-import io.quarkiverse.mcp.server.core.Value;
+import io.quarkiverse.mcp.server.ToolManager;
+import io.quarkiverse.mcp.server.ToolResponse;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
@@ -34,24 +33,22 @@ public class ExternalToolBridge {
      */
     void onStart(@Observes StartupEvent ev) {
         toolRegistry.getAll().forEach((name, tool) -> {
-            toolManager.registerTool(ToolRef.of(name, tool.description())
-                .blocking() // External tools are considered blocking by default
-                .handler(ctx -> {
-                    try {
-                        String input = ctx.arguments().get("input").asString();
-                        var result = tool.execute(input);
-                        return CompletableFuture.completedFuture(
-                            result.isSuccess() 
-                                ? Value.of(result.getOutput())
-                                : Value.error(result.getError())
-                        );
-                    } catch (Exception e) {
-                        return CompletableFuture.completedFuture(
-                            Value.error("Tool execution failed: " + e.getMessage())
-                        );
-                    }
-                })
-                .build());
+            toolManager.newTool(name) 
+                .setDescription(tool.description())
+                .addArgument("input", "Input value for tool execution", true, String.class)
+                .setHandler(
+                    arguments ->  {
+                                 try {
+                                     String input = arguments.args().get("input").toString();
+                                     var result = tool.execute(input);
+                                     return result.isSuccess()
+                                             ? ToolResponse.success(result.getOutput())
+                                             : ToolResponse.error(result.getError());
+                                 } catch (Exception e) {
+                                     return ToolResponse.error("Tool execution failed: " + e.getMessage());
+                                 }
+                             })
+                .register();
         });
     }
 }

@@ -1,10 +1,10 @@
 plugins {
     id 'java'
-    id 'io.quarkus' version '3.5.0'
+    id 'io.quarkus' version '3.29.2'
     id 'io.freefair.lombok' version '8.4'
 }
 
-group = 'com.servy.mcp'
+group = 'com.example'
 version = '1.0.0-SNAPSHOT'
 
 repositories {
@@ -12,21 +12,24 @@ repositories {
 }
 
 dependencies {
-    implementation enforcedPlatform("io.quarkus.platform:quarkus-bom:3.5.0")
-    implementation enforcedPlatform("io.quarkiverse.mcp:quarkus-mcp-server-bom:1.7.0")
+    // Align with Quarkus platform using properties read by the Quarkus Gradle plugin as well
+    implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
+    // BOM for quarkiverse MCP extensions
+    implementation(enforcedPlatform("io.quarkiverse.mcp:quarkus-mcp-server-bom:1.7.1"))
+
     implementation 'io.quarkus:quarkus-arc'
+    implementation 'io.quarkiverse.mcp:quarkus-mcp-server-core'
     implementation 'io.quarkiverse.mcp:quarkus-mcp-server-sse'
+
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'io.quarkiverse.mcp:quarkus-mcp-server-test'
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
-}
-
-test {
-    useJUnitPlatform()
 }
