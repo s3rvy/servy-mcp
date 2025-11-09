@@ -1,4 +1,4 @@
-package com.servy.mcp.tool;
+package de.floydkretschmar.mcp.tool;
 
 import org.junit.jupiter.api.Test;
 

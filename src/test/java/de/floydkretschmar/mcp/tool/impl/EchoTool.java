@@ -1,7 +1,7 @@
-package com.servy.mcp.tool.impl;
+package de.floydkretschmar.mcp.tool.impl;
 
-import com.servy.mcp.tool.Tool;
-import com.servy.mcp.tool.ToolResult;
+import de.floydkretschmar.mcp.tool.Tool;
+import de.floydkretschmar.mcp.tool.ToolResult;
 
 /**
  * Example external Tool implementation that echoes back the input.

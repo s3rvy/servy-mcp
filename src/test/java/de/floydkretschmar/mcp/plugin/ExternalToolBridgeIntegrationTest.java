@@ -1,4 +1,4 @@
-package com.servy.mcp.plugin;
+package de.floydkretschmar.mcp.plugin;
 
 import io.quarkiverse.mcp.server.test.McpAssured;
 import io.quarkus.test.junit.QuarkusTest;

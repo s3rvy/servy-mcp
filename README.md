@@ -60,7 +60,7 @@ public class MyTool implements Tool {
 ```
 
 3. Register your tool via `META-INF/services`:
-Create `src/main/resources/META-INF/services/com.servy.mcp.tool.Tool` containing:
+Create `src/main/resources/META-INF/services/tool.de.floydkretschmar.mcp.Tool` containing:
 ```
 com.example.MyTool
 ```

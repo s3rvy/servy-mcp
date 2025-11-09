@@ -1,4 +1,4 @@
-package com.servy.mcp.tool;
+package de.floydkretschmar.mcp.tool;
 
 import lombok.Builder;
 import lombok.Value;

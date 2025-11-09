@@ -1,14 +1,12 @@
-package com.servy.mcp.plugin;
+package de.floydkretschmar.mcp.plugin;
 
-import com.servy.mcp.tool.Tool;
-import com.servy.mcp.tool.ToolRegistry;
+import de.floydkretschmar.mcp.tool.ToolRegistry;
 import io.quarkiverse.mcp.server.ToolManager;
 import io.quarkiverse.mcp.server.ToolResponse;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * Bridges external tools (loaded via SPI) with the Quarkus MCP ToolManager.
