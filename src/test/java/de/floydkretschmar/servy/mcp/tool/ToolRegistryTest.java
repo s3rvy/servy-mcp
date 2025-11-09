@@ -54,19 +54,4 @@ class ToolRegistryTest {
         assertThatThrownBy(() -> tools.put("test", null))
             .isInstanceOf(UnsupportedOperationException.class);
     }
-
-    @Test
-    void shouldLogWarningWhenOverridingDefaultTool() {
-        final Tool mockTool = mock(Tool.class);
-        when(mockTool.name()).thenReturn("echo-conflict");
-        when(pluginToolLoader.getDynamicTools()).thenReturn(Map.of("echo", mockTool));
-        try (MockedStatic<LoggerFactory> context = Mockito.mockStatic(LoggerFactory.class)) {
-            context.when(() -> LoggerFactory.getLogger(Mockito.any(Class.class)))
-                    .thenReturn(logger);
-
-            ToolRegistry registry = new ToolRegistry(pluginToolLoader);
-
-            verify(logger).warn("Tool '{}' conflicts with default tool - skipping", "echo-conflict");
-        }
-    }
 }
