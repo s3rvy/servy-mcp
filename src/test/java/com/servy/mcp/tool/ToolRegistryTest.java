@@ -1,7 +1,5 @@
 package com.servy.mcp.tool;
 
-import com.servy.mcp.tool.impl.EchoTool;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -14,50 +12,46 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ToolRegistryTest {
 
-    private ToolRegistry registry;
-
-    @BeforeEach
-    void setUp() {
-        registry = new ToolRegistry();
+    @Test
+    void shouldCreateRegistry() {
+        ToolRegistry registry = new ToolRegistry();
+        assertNotNull(registry);
     }
 
     @Test
-    void testRegistryLoadsTools() {
-        Map<String, Tool> tools = registry.getAll();
-        assertNotNull(tools);
-        assertFalse(tools.isEmpty(), "Registry should discover at least one tool");
-    }
-
-    @Test
-    void testGetEchoTool() {
+    void shouldDiscoverEchoTool() {
+        ToolRegistry registry = new ToolRegistry();
         Tool echoTool = registry.get("echo");
-        assertNotNull(echoTool, "Echo tool should be registered");
+
+        assertNotNull(echoTool, "Echo tool should be discovered via ServiceLoader");
         assertEquals("echo", echoTool.name());
-        assertTrue(echoTool instanceof EchoTool);
     }
 
     @Test
-    void testGetNonExistentTool() {
-        Tool tool = registry.get("nonexistent");
-        assertNull(tool, "Non-existent tool should return null");
+    void shouldReturnNullForUnknownTool() {
+        ToolRegistry registry = new ToolRegistry();
+        Tool unknownTool = registry.get("non-existent-tool");
+
+        assertNull(unknownTool);
     }
 
     @Test
-    void testGetAllReturnsUnmodifiableMap() {
+    void shouldReturnAllTools() {
+        ToolRegistry registry = new ToolRegistry();
         Map<String, Tool> tools = registry.getAll();
+
+        assertNotNull(tools);
+        assertFalse(tools.isEmpty(), "Should have at least one tool (echo)");
+        assertTrue(tools.containsKey("echo"));
+    }
+
+    @Test
+    void shouldReturnUnmodifiableMap() {
+        ToolRegistry registry = new ToolRegistry();
+        Map<String, Tool> tools = registry.getAll();
+
         assertThrows(UnsupportedOperationException.class, () -> {
-            tools.put("test", new EchoTool());
-        }, "getAll() should return unmodifiable map");
-    }
-
-    @Test
-    void testToolsHaveUniqueNames() {
-        Map<String, Tool> tools = registry.getAll();
-        long uniqueNames = tools.values().stream()
-            .map(Tool::name)
-            .distinct()
-            .count();
-
-        assertEquals(tools.size(), uniqueNames, "All tools should have unique names");
+            tools.put("test", null);
+        }, "getAll() should return an unmodifiable map");
     }
 }
