@@ -1,4 +1,4 @@
-package de.floydkretschmar.mcp.tool;
+package de.floydkretschmar.servy.mcp.tool;
 
 /**
  * SPI interface for MCP tools that can be developed externally

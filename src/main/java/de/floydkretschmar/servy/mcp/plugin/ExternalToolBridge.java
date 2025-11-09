@@ -1,6 +1,6 @@
-package de.floydkretschmar.mcp.plugin;
+package de.floydkretschmar.servy.mcp.plugin;
 
-import de.floydkretschmar.mcp.tool.ToolRegistry;
+import de.floydkretschmar.servy.mcp.tool.ToolRegistry;
 import io.quarkiverse.mcp.server.ToolManager;
 import io.quarkiverse.mcp.server.ToolResponse;
 import io.quarkus.runtime.StartupEvent;
@@ -15,14 +15,13 @@ import jakarta.inject.Inject;
  */
 @ApplicationScoped
 public class ExternalToolBridge {
-
-    @Inject
-    ToolManager toolManager;
+    final ToolManager toolManager;
 
     private final ToolRegistry toolRegistry;
 
-    public ExternalToolBridge() {
-        this.toolRegistry = new ToolRegistry();
+    public ExternalToolBridge(PluginToolLoader pluginLoader, ToolManager toolManager) {
+        this.toolRegistry = new ToolRegistry(pluginLoader);
+        this.toolManager = toolManager;
     }
 
     /**
@@ -30,7 +29,7 @@ public class ExternalToolBridge {
      * Each tool is wrapped in a ToolRef that handles execution and error management.
      */
     void onStart(@Observes StartupEvent ev) {
-        toolRegistry.getAll().forEach((name, tool) -> {
+        toolRegistry.getTools().forEach((name, tool) -> {
             toolManager.newTool(name) 
                 .setDescription(tool.description())
                 .addArgument("input", "Input value for tool execution", true, String.class)

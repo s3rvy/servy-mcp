@@ -27,6 +27,7 @@ dependencies {
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.quarkiverse.mcp:quarkus-mcp-server-test'
     testImplementation 'org.assertj:assertj-core:3.27.6'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.20.0'
 }
 
 java {
